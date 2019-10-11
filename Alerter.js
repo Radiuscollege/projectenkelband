@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Vibration} from 'react-native';
 import { Audio } from 'expo-av';
 
-const soundObject = new Audio.Sound();
+// const soundObject = new Audio.Sound();
 export default class Alerter extends React.Component {
     constructor(props) {
         super(props)
@@ -25,8 +25,8 @@ export default class Alerter extends React.Component {
     async sound() {
         
         try {
-            await soundObject.loadAsync(require('./assets/sound.mp3'));
-            await soundObject.playAsync();
+            // await soundObject.loadAsync(require('./assets/sound.mp3'));
+            // await soundObject.playAsync();
             // Your sound is playing!
         } catch (error) {
             // An error occurred!
@@ -40,8 +40,13 @@ export default class Alerter extends React.Component {
 
     stopAlert() {
         Vibration.cancel();
-        soundObject.stopAsync();
-        soundObject.unloadAsync();
+        try {
+            soundObject.stopAsync();
+            soundObject.unloadAsync();
+        } catch(e) {
+
+        }
+    
     }
 
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
@@ -8,8 +7,7 @@ export default class Map extends React.Component {
     
 
     constructor(props) {
-        super(props)
-    
+        super(props)    
     }
 
     state = {
@@ -18,14 +16,34 @@ export default class Map extends React.Component {
     }
 
     componentDidMount() {
-        console.log('component mounted');
-        this.getLocationAsync();
+
+        // this.getLocationAsync();
+        setInterval(() => {
+            this.getLocationAsync();
+        }, 1000);
     }
 
     componentDidUpdate() {
 
     }
 
+    getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = this.deg2rad(lat2 - lat1);  // deg2rad below
+        var dLon = this.deg2rad(lon2 - lon1);
+        var a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2)
+            ;
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c; // Distance in km
+        return d;
+    }
+
+    deg2rad(deg) {
+        return deg * (Math.PI / 180)
+    }
 
     async getLocationAsync()  {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -35,15 +53,16 @@ export default class Map extends React.Component {
             })
         }
         let location = await Location.getCurrentPositionAsync({});
-       
-        this.setState({location: location});
-        this.props.getLocation(location); 
+        let diffInKm = this.getDistanceFromLatLonInKm(location.coords.latitude, location.coords.longitude, this.props.coords.lat, this.props.coords.lon)
+        
+        this.props.getDiffInKm(diffInKm); 
     }
 
     render() {
-          return (<View>
-              <Text> map component </Text>
-              </View>)
+        return (
+        <View>
+            <Text> map component </Text>
+        </View>)
     }
 }
 
