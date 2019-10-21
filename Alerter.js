@@ -6,7 +6,7 @@ import { Audio } from 'expo-av';
 export default class Alerter extends React.Component {
     constructor(props) {
         super(props)
-   
+
     }
 
     componentDidUpdate() {

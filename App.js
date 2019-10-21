@@ -19,15 +19,18 @@ export default class App extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.diffInKm >= this.state.treshold) {
-      this.setState({
-        alert: true
-      });
-    } else {
-      this.setState({
-        alert: false
-      })
-    }
+    setInterval(() => {
+      if (this.state.diffInKm >= this.state.treshold) {
+        this.setState({
+          alert: true
+        });
+      } else {
+        this.setState({
+          alert: false
+        })
+      }
+    },5000)
+    
   }
     
   setDiff = (diffInKm) => {
@@ -52,6 +55,7 @@ export default class App extends React.Component {
           this.setState({
           alert: !this.state.alert
         }) }} title="vibrate">Vibrate</Button>
+        
       </View>
     );
   }
